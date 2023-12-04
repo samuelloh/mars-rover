@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class RoverCommandLineRunner implements CommandLineRunner {
@@ -65,7 +67,7 @@ class RoverArguments {
     private final String commands;
 
     private final Set<Character> validDirections = Set.of('N', 'S', 'E', 'W');
-    private final Set<Character> validCommands = Set.of('f', 'b', 'r', 'l');
+    private final String validCommands = "f,r,l,b";
 
     public RoverArguments(String startPosition, String commands) throws IllegalArgumentException {
 
@@ -120,9 +122,14 @@ class RoverArguments {
     }
 
     private String checkInvalidCommands(String commands) {
-        for (char c : commands.toCharArray()) {
-            if (!validCommands.contains(c)) {
-                return String.format("Invalid character '%c'", c);
+        Pattern pattern = Pattern.compile("^[frlb]([,][frlb])*$");
+        Matcher matcher = pattern.matcher(commands);
+
+        if (!matcher.matches()) {
+            Matcher invalidMatcher = Pattern.compile("(?<!^)(?!$)[^frlb,]").matcher(commands);
+            while (invalidMatcher.find()) {
+                String invalidCharacter = invalidMatcher.group();
+                return "Invalid character: " + invalidCharacter;
             }
         }
         return null;
