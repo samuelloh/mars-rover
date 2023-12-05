@@ -4,7 +4,7 @@ import com.samuellohjw.marsroverapp.model.Position;
 import com.samuellohjw.marsroverapp.model.Rover;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 @Component
 public class RoverManager {
@@ -12,7 +12,7 @@ public class RoverManager {
     // List of Rovers
 
     // List of final positions of Rovers after they execute their command
-    private final HashSet<Position> roverFinalPositions;
+    private final LinkedHashSet<Position> roverFinalPositions;
 
     private final char forward = 'f';
     private final char backward = 'b';
@@ -21,7 +21,7 @@ public class RoverManager {
 
 
     public RoverManager() {
-        this.roverFinalPositions = new HashSet<>();
+        this.roverFinalPositions = new LinkedHashSet<>();
     }
 
     public Rover createRover(String startPosition) {
@@ -60,7 +60,6 @@ public class RoverManager {
             }
         }
 
-        PrintFinalPosition(position);
         addFinalPosition(position);
 
     }
@@ -73,6 +72,13 @@ public class RoverManager {
     private void addFinalPosition(Position position) {
         this.roverFinalPositions.add(position);
     }
+
+    public void printAllFinalPositions() {
+        for (Position position : roverFinalPositions) {
+            printFinalPosition(position);
+        }
+    }
+
 
     /**
      * Takes in a start position string and returns a Position class. Note this method
@@ -89,7 +95,8 @@ public class RoverManager {
         return new Position(x, y, direction);
     }
 
-    private void PrintFinalPosition(Position position) {
+
+    private void printFinalPosition(Position position) {
         System.out.printf("Final Coordinate: %s, %s\n", position.getXString(), position.getYString());
         System.out.printf("Final Direction: %s\n", position.getDirectionString());
     }

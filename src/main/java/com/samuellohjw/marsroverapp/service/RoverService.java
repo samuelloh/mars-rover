@@ -25,8 +25,10 @@ public class RoverService {
             logger.error(String.format("Error creating rover: %s", e.getMessage()));
             logger.info("Skipping rover and moving on to next");
         }
+    }
 
-
+    public void printFinalPositionsOfAllRovers() {
+        roverManager.printAllFinalPositions();
     }
 
     private Rover createRover(String startPosition) throws IllegalRoverPositionException {
