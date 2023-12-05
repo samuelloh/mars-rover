@@ -26,7 +26,7 @@ public class RoverCommandLineRunner implements CommandLineRunner {
         if (args.length < 3) {
             logger.error("Please provide appropriate command-line arguments.\n" +
                     "Usage: <No. of rovers> [<Position> <commands>]\n" +
-                    "Example: 2 3,N, fbrl 2,3,S fb");
+                    "Example: 2 4,3,N f,b,r,l 2,3,S f,b");
             return;
         }
         ArrayList<RoverArguments> roverList = new ArrayList<>();
@@ -67,7 +67,7 @@ class RoverArguments {
     private final String commands;
 
     private final Set<Character> validDirections = Set.of('N', 'S', 'E', 'W');
-    private final String validCommands = "f,r,l,b";
+    private final String validCommands = "frlb";
 
     public RoverArguments(String startPosition, String commands) throws IllegalArgumentException {
 
@@ -122,11 +122,11 @@ class RoverArguments {
     }
 
     private String checkInvalidCommands(String commands) {
-        Pattern pattern = Pattern.compile("^[frlb]([,][frlb])*$");
+        Pattern pattern = Pattern.compile("^[" + validCommands + "]([,][" + validCommands + "])*$");
         Matcher matcher = pattern.matcher(commands);
 
         if (!matcher.matches()) {
-            Matcher invalidMatcher = Pattern.compile("(?<!^)(?!$)[^frlb,]").matcher(commands);
+            Matcher invalidMatcher = Pattern.compile("(?<!^)(?!$)[^" + validCommands + ",]").matcher(commands);
             while (invalidMatcher.find()) {
                 String invalidCharacter = invalidMatcher.group();
                 return "Invalid character: " + invalidCharacter;
