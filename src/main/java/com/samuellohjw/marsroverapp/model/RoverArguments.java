@@ -15,8 +15,6 @@ public class RoverArguments {
             throw new IllegalArgumentException(String.format("Invalid Start Position: '%s'\n", errorStartPosition));
         }
         String errorCommand = checkInvalidCommands(commands);
-        System.out.println("here");
-        System.out.println(errorCommand);
         if (errorCommand != null) {
             throw new IllegalArgumentException(String.format("invalid Rover command: '%s'\n", errorCommand));
         }
