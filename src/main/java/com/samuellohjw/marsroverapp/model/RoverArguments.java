@@ -1,15 +1,12 @@
 package com.samuellohjw.marsroverapp.model;
 
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RoverArguments {
     private final String startPosition;
     private final String commands;
 
     private final Set<Character> validDirections = Set.of('N', 'S', 'E', 'W');
-    private final String validCommands = "frlb";
 
     public RoverArguments(String startPosition, String commands) throws IllegalArgumentException {
 
@@ -18,6 +15,8 @@ public class RoverArguments {
             throw new IllegalArgumentException(String.format("Invalid Start Position: '%s'\n", errorStartPosition));
         }
         String errorCommand = checkInvalidCommands(commands);
+        System.out.println("here");
+        System.out.println(errorCommand);
         if (errorCommand != null) {
             throw new IllegalArgumentException(String.format("invalid Rover command: '%s'\n", errorCommand));
         }
@@ -35,10 +34,6 @@ public class RoverArguments {
     }
 
     private String checkStartPosition(String startPosition) {
-        // Check if the string has length 5 (3 characters separated by comma)
-        if (startPosition.length() != 5) {
-            return "Start position must have 3 characters separated by commas";
-        }
 
         // Split the string by comma
         String[] parts = startPosition.split(",");
@@ -64,17 +59,18 @@ public class RoverArguments {
     }
 
     private String checkInvalidCommands(String commands) {
-        Pattern pattern = Pattern.compile("^[" + validCommands + "]([,][" + validCommands + "])*$");
-        Matcher matcher = pattern.matcher(commands);
+        String validCommands = "frlb";
+        String[] commandArray = commands.split(",");
 
-        if (!matcher.matches()) {
-            Matcher invalidMatcher = Pattern.compile("(?<!^)(?!$)[^" + validCommands + ",]").matcher(commands);
-            while (invalidMatcher.find()) {
-                String invalidCharacter = invalidMatcher.group();
-                return "Invalid character: " + invalidCharacter;
+        for (String command : commandArray) {
+            // Check if each character is not in the validCommands
+            if (command.length() != 1 || validCommands.indexOf(command.charAt(0)) == -1) {
+                return "Invalid character: " + command;
             }
         }
+
         return null;
+
     }
 
 }
